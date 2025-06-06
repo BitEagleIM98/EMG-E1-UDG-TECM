@@ -149,7 +149,8 @@ def extraer_trial(movimiento,num_trial_mov,secuencia):
 
 ####Ejemplo de uso para funciones
 if __name__ == '__main__':
-    directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
+    #directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
+    directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" # Pegar aquí ruta de la carpeta con informacion del participante
     archivos , corridas = obtener_archivos_carpeta(directorio)
     if debug_f == True:
         print('Carpeta contiene: ', archivos)
