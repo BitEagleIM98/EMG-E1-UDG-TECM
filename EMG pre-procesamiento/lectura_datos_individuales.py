@@ -6,6 +6,7 @@ import pandas as pd
 import re
 import Filtros.Filtro_pb as fpb 
 import Filtros.Filtro_comp as fcmp
+import codigos_movimientos as cm
 
 debug_f = False
 senal_original = False
@@ -105,7 +106,7 @@ def Matriz_3D_run(data_frame, frecuencia, num_trials, tamano_trial, canales):
         print('Nombre de canales: ', nombres_canales)
     return data3D_run, nombres_canales
 
-def visualizar_trial(numero_trial, matriz, seq, nombres_canales):
+def visualizar_trial(numero_trial, matriz, seq, nombres_canales, movimiento):
     numero_trial=numero_trial - 1
     sequencia = seq
     duracion_estimulos = 2 # segundos
@@ -124,7 +125,7 @@ def visualizar_trial(numero_trial, matriz, seq, nombres_canales):
         for j, esti in enumerate(estimulos):
             tiempo_estimulo = j * duracion_estimulos
             plt.axvline(x=tiempo_estimulo,color='g',linestyle='--',label=f'Estímulos: {esti}' if j== 0 else '')
-    plt.suptitle(f'Datos de EMG - Trial {numero_trial+1} - estímulos: {estimulos[0]},{estimulos[1]},{estimulos[2]},{estimulos[3]}',fontsize=14)
+    plt.suptitle(f'Datos de EMG - Trial {numero_trial+1} - estímulos: {estimulos[0]},{estimulos[1]},{estimulos[2]},{estimulos[3]} - código de movimiento: {movimiento}',fontsize=14)
     plt.tight_layout()
     plt.subplots_adjust(top=0.9)
     plt.show()
@@ -155,7 +156,8 @@ if __name__ == '__main__':
         print('Corridas: ', corridas)
     run = 3 #La corrida que se desea extraer
     corrida = archivos[run - 1]
-    estimulo = 7 # Numero de estimulo (movimiento) que se desea extraer de la secuencia dada (valores del 3 al 14)
+    movimiento = "H0F1" # Código de movimiento que se pretende revisar en la información segmentada
+    estimulo = cm.movimiento_a_estimulo(movimiento) # Numero de estimulo (movimiento) que se desea extraer de la secuencia dada (valores del 3 al 14)
     rep = 2 # Vez o repetición en que aparece el estimulo en la secuencia
     print(f'\nDatos de participante provienen de la direccion: {directorio} de donde se va a extraer el run o corrida: {run}, con el nombre de archivo .dat: {corrida}\n')
     se , es , fo_es , fo , sti, trials, freq, seq = extraer_datos(directorio, corrida)
@@ -172,6 +174,4 @@ if __name__ == '__main__':
         fcmp.filtro_comp(se[0])
     matriz3d, nombres_canales_bipolares = Matriz_3D_run(data_frame_bipolar_filtrado, freq, trials, 8 , canales_bipolares)
     trial, arr_trials = extraer_trial(estimulo,rep,seq)
-    visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares)
-   
-    
+    visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares, movimiento)
