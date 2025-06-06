@@ -5,9 +5,11 @@ import lectura_datos_individuales as ldi
 import Filtros.Filtro_pb as fpb
 import matplotlib.pyplot as plt
 
+##### Banderas iniciales
 debug_f = False
 visual_f = False
 bipolar_ch_f = True # Para convertir en canales bipolares y filtrar, siempre mantener en True
+dir_local = True # Poner en False para ingresar directorio de la carpeta del proyecto en Git
 
 fs = 1200 # Frecuencia de muestreo
 
@@ -221,8 +223,11 @@ def visualizar_EMG_participamte(datamatrix, channel_names):
 ####Ejemplo de uso para funciones
 if __name__ == '__main__':
     #### remplazar por directorio con datos del participante
-    #directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
-    directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" # Pegar aquí ruta de la carpeta con informacion del participante
+    if dir_local == True:
+        directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P01001"
+    else:
+        directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" 
+        # Pegar aquí ruta de la carpeta con informacion del participante
     archivos , corridas = ldi.obtener_archivos_carpeta(directorio)
     n_trial= 5 #Número de trial que se quiere visualizar 1 - 540
     n_channel=1 #Número de canal que se quiere visualizar 1 - 8
