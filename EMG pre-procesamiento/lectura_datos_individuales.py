@@ -8,8 +8,10 @@ import Filtros.Filtro_pb as fpb
 import Filtros.Filtro_comp as fcmp
 import codigos_movimientos as cm
 
+##### Banderas iniciales
 debug_f = False
 senal_original = False
+dir_local = True # Poner en False para ingresar directorio de la carpeta del proyecto en Git
 
 def obtener_archivos_carpeta(carpeta):
     archivos = os.listdir(carpeta)
@@ -149,15 +151,18 @@ def extraer_trial(movimiento,num_trial_mov,secuencia):
 
 ####Ejemplo de uso para funciones
 if __name__ == '__main__':
-    #directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
-    directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" # Pegar aquí ruta de la carpeta con informacion del participante
+    if dir_local == True:
+        directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
+    else:
+        directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" 
+        # Pegar aquí ruta de la carpeta con informacion del participante
     archivos , corridas = obtener_archivos_carpeta(directorio)
     if debug_f == True:
         print('Carpeta contiene: ', archivos)
         print('Corridas: ', corridas)
     run = 3 #La corrida que se desea extraer
     corrida = archivos[run - 1]
-    movimiento = "H0F1" # Código de movimiento que se pretende revisar en la información segmentada
+    movimiento = "H1F2" # Código de movimiento que se pretende revisar en la información segmentada
     estimulo = cm.movimiento_a_estimulo(movimiento) # Numero de estimulo (movimiento) que se desea extraer de la secuencia dada (valores del 3 al 14)
     rep = 2 # Vez o repetición en que aparece el estimulo en la secuencia
     print(f'\nDatos de participante provienen de la direccion: {directorio} de donde se va a extraer el run o corrida: {run}, con el nombre de archivo .dat: {corrida}\n')
