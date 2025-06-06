@@ -129,6 +129,22 @@ def visualizar_trial(numero_trial, matriz, seq, nombres_canales):
     plt.subplots_adjust(top=0.9)
     plt.show()
 
+def extraer_trial(movimiento,num_trial_mov,secuencia):
+    trial_contador = 0
+    trial = 0
+    vector_trials = []
+    for i in secuencia:
+        trial_contador += 1
+        if trial_contador == 4:
+            trial += 1
+            trial_contador = 0
+        if i == movimiento:
+            vector_trials.append(trial+1)
+    num_trial = vector_trials[num_trial_mov-1]
+    if debug_f == True:
+        print(f'El vector con los trials que corresponden al movimiento: {movimiento}, es: {vector_trials}')
+        print('El trial que se pide analizar es el numero: ', num_trial)
+    return num_trial , vector_trials
 
 ####Ejemplo de uso para funciones
 if __name__ == '__main__':
@@ -137,8 +153,10 @@ if __name__ == '__main__':
     if debug_f == True:
         print('Carpeta contiene: ', archivos)
         print('Corridas: ', corridas)
-    run = 2 #La corrida que se desea extraer
+    run = 3 #La corrida que se desea extraer
     corrida = archivos[run - 1]
+    estimulo = 7 # Numero de estimulo (movimiento) que se desea extraer de la secuencia dada (valores del 3 al 14)
+    rep = 2 # Vez o repetición en que aparece el estimulo en la secuencia
     print(f'\nDatos de participante provienen de la direccion: {directorio} de donde se va a extraer el run o corrida: {run}, con el nombre de archivo .dat: {corrida}\n')
     se , es , fo_es , fo , sti, trials, freq, seq = extraer_datos(directorio, corrida)
     data_frame_bipolar, forma, datos_bipolares = conversion_bipolar(se)
@@ -153,6 +171,7 @@ if __name__ == '__main__':
         grafica(data_frame_bipolar_filtrado, forma[1])
         fcmp.filtro_comp(se[0])
     matriz3d, nombres_canales_bipolares = Matriz_3D_run(data_frame_bipolar_filtrado, freq, trials, 8 , canales_bipolares)
-    visualizar_trial(11,matriz3d,seq, nombres_canales_bipolares)
+    trial, arr_trials = extraer_trial(estimulo,rep,seq)
+    visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares)
    
     
