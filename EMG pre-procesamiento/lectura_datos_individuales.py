@@ -128,9 +128,32 @@ def visualizar_trial(numero_trial, matriz, seq, nombres_canales, movimiento):
             tiempo_estimulo = j * duracion_estimulos
             plt.axvline(x=tiempo_estimulo,color='g',linestyle='--',label=f'Estímulos: {esti}' if j== 0 else '')
     plt.suptitle(f'Datos de EMG - Trial {numero_trial+1} - estímulos: {estimulos[0]},{estimulos[1]},{estimulos[2]},{estimulos[3]} - código de movimiento: {movimiento}',fontsize=14)
-    plt.tight_layout()
     plt.subplots_adjust(top=0.9)
     plt.show()
+
+def visualizar_trial_conjunto(arr_trials, matriz, seq, nombres_canales, movimiento):
+    for j in range(len(arr_trials)):
+        numero_trial=arr_trials[j]-1
+        sequencia = seq
+        duracion_estimulos = 2 # segundos
+        num_trials = len(sequencia)//4 # Calcula el numero de trials totales, considerando 4 estimulos por trial
+        trials_estimulos = sequencia.reshape(num_trials, 4)#4 estimulos por trial
+        datos_trial = matriz[numero_trial, : , :]
+        estimulos = trials_estimulos[numero_trial,:]
+        plt.figure(figsize=(12,6))
+        for i, nombre_ch in enumerate(nombres_canales):
+            plt.subplot(len(nombres_canales), 1, i +1)
+            plt.plot(np.arange(datos_trial.shape[1])/freq,datos_trial[i,:])
+            plt.title(f'Canal {nombre_ch}')
+            plt.xlabel("Tiempo (s)")
+            plt.ylabel('Amplitud (uV)')
+            plt.grid(True)
+            for j, esti in enumerate(estimulos):
+                tiempo_estimulo = j * duracion_estimulos
+                plt.axvline(x=tiempo_estimulo,color='g',linestyle='--',label=f'Estímulos: {esti}' if j== 0 else '')
+        plt.suptitle(f'Datos de EMG - Trial {numero_trial+1} - estímulos: {estimulos[0]},{estimulos[1]},{estimulos[2]},{estimulos[3]} - código de movimiento: {movimiento}',fontsize=14)
+        plt.subplots_adjust(top=0.9)
+        plt.show()
 
 def extraer_trial(movimiento,num_trial_mov,secuencia):
     trial_contador = 0
@@ -162,7 +185,7 @@ if __name__ == '__main__':
         print('Corridas: ', corridas)
     run = 3 #La corrida que se desea extraer
     corrida = archivos[run - 1]
-    movimiento = "H1F2" # Código de movimiento que se pretende revisar en la información segmentada
+    movimiento = "H0F2" # Código de movimiento que se pretende revisar en la información segmentada
     estimulo = cm.movimiento_a_estimulo(movimiento) # Numero de estimulo (movimiento) que se desea extraer de la secuencia dada (valores del 3 al 14)
     rep = 2 # Vez o repetición en que aparece el estimulo en la secuencia
     print(f'\nDatos de participante provienen de la direccion: {directorio} de donde se va a extraer el run o corrida: {run}, con el nombre de archivo .dat: {corrida}\n')
@@ -181,3 +204,4 @@ if __name__ == '__main__':
     matriz3d, nombres_canales_bipolares = Matriz_3D_run(data_frame_bipolar_filtrado, freq, trials, 8 , canales_bipolares)
     trial, arr_trials = extraer_trial(estimulo,rep,seq)
     visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares, movimiento)
+    visualizar_trial_conjunto(arr_trials,matriz3d,seq, nombres_canales_bipolares, movimiento)
