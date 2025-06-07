@@ -12,6 +12,7 @@ import codigos_movimientos as cm
 debug_f = False
 senal_original = False
 dir_local = True # Poner en False para ingresar directorio de la carpeta del proyecto en Git
+visualizador = "Completo" # Escribir "Completo" para visualizar los 5 trials del mismo movimiento y "Unitario" para un solo trial
 
 def obtener_archivos_carpeta(carpeta):
     archivos = os.listdir(carpeta)
@@ -175,7 +176,7 @@ def extraer_trial(movimiento,num_trial_mov,secuencia):
 ####Ejemplo de uso para funciones
 if __name__ == '__main__':
     if dir_local == True:
-        directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P0T001"
+        directorio = "C:\BCI2000\BCI2000 v3.6.beta.R7385\BCI2000.x64\data\Participantes\P02001"
     else:
         directorio = "I:\Doctorado\Git\EMG-E1-UDG-TECM\Participantes\P0T001" 
         # Pegar aquí ruta de la carpeta con informacion del participante
@@ -203,5 +204,9 @@ if __name__ == '__main__':
         fcmp.filtro_comp(se[0])
     matriz3d, nombres_canales_bipolares = Matriz_3D_run(data_frame_bipolar_filtrado, freq, trials, 8 , canales_bipolares)
     trial, arr_trials = extraer_trial(estimulo,rep,seq)
-    visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares, movimiento)
-    visualizar_trial_conjunto(arr_trials,matriz3d,seq, nombres_canales_bipolares, movimiento)
+    if visualizador == "Unitario":
+        visualizar_trial(trial,matriz3d,seq, nombres_canales_bipolares, movimiento)
+    if visualizador == "Completo":
+        visualizar_trial_conjunto(arr_trials,matriz3d,seq, nombres_canales_bipolares, movimiento)
+    else:
+        pass
